@@ -1,0 +1,10 @@
+<h2>Register New Student</h2>
+<form method="POST">
+    <input name="name" placeholder="Full Name" required>
+    <select name="department" required>
+        {% for dept in departments %}
+        <option value="{{ dept.id }}">{{ dept.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Register</button>
+</form>

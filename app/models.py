@@ -1,29 +1,27 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy()
 
 class Department(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    code = db.Column(db.String(20), unique=True)
+    name = db.Column(db.String(100))
+    code = db.Column(db.String(10), unique=True)
+    students = db.relationship('Student', backref='department', lazy=True)
+    staff = db.relationship('Staff', backref='department', lazy=True)
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    full_name = db.Column(db.String(150), nullable=False)
-    dob = db.Column(db.Date)
-    contact = db.Column(db.String(20))
-    address = db.Column(db.Text)
+    name = db.Column(db.String(100))
     email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(200))  # Store hashed password
-    barcode_data = db.Column(db.String(200), unique=True)
+    password = db.Column(db.String(128))
+    barcode = db.Column(db.String(128), unique=True)
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'))
 
 class Staff(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    full_name = db.Column(db.String(150), nullable=False)
-    contact = db.Column(db.String(20))
-    role = db.Column(db.String(50))
+    name = db.Column(db.String(100))
     email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(200))
+    password = db.Column(db.String(128))
+    role = db.Column(db.String(50))
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'))
